@@ -1,4 +1,5 @@
-
+import sys
+from time import sleep
 
 class Room(object):
     def __init__(self, name, description):
@@ -22,10 +23,10 @@ class Item(object):
 #bed room items
 book = Item("book", "The book is heavy it's about the electro element", False)
 gem = Item("gem", "Mysterious gemstone that have the use to something", True)
-bedroom = Room("Your Bedroom", "You can see some books and a purple gemstone inside a glass clinder")
+bedroom = Room("Your Bedroom\n", "You can see some books and a purple gemstone inside a glass clinder")
 
 #Training area items
-mistress = Item("mistress", "She looks disappointed", False)
+statue = Item("statue", "It looks disappointed", False)
 dummy = Item("dummy", "A simple training dummy looking directly into your soul waiting for you to attack it", False)
 guide_book = Item("book", "A guide book to awaken your element. I've been trying to follow the steps but it's insanly hard..", True)
 map = Item("map", "A map which shows all geographical landmarks of your surroundings.", True)
@@ -35,7 +36,7 @@ energy = Item("energy", "A hidden spiritual power. Can only be obtained by yours
 #Garden items
 wishing_well = Item("well", "It's a wishing well. You can wish anything you want by throwing a coin down.", False)
 staff = Item("staff", "A staff made out of energys from lightning. I can use it to defend myself", False)
-mistress = Item("mistress", "Take the staff and go into the forest to complete your training.", False)
+statue2 = Item("statue", "It seems like it's pointing me to go to the forest.\nI better grab the staff before I go.", False)
 wishing_token = Item("token", "Wishing token, a thing you can get from wishing in the well", False)
 
 #Old hut items
@@ -44,36 +45,38 @@ clock = Item("clock", "It's a broken clock seems like it's a use for something",
 dagger = Item("dagger", "A rusty dagger. I think I should keep it just in case.", True)
 bed = Item("bed", "Looks old and broken", False)
 Ruin_guardian = Item("ruin_guardian", "A destroyed ruin guardian. These robotic creatures are very menacing.", False)
-guardian_core = Item("guardian_core", "A core that can power up a fighting machine.", True)
+core = Item("core", "A core that can power up a fighting machine.", True)
 
 #Forest entrance items
 Grass_crawler = Item("crawler", "Grass crawlers, dangerous creatures that lurk around the forest.", False)
 Grass_essence = Item("essence", "Grass crawler essence that can be used later.", True)
+Trees = Item("trees", "Just typical tress, what do you expect? Treasure??\n I better keep going.", False)
 
 #Bedroom 
 bedroom.items.append(book)
 bedroom.items.append(gem)
 
 #Training area
-Training_area = Room("Training area", "The training area where fearsome warriors trained for decades.")
-Training_area.items.append(mistress)
+Training_area = Room("Training area\n", "The training area where fearsome warriors trained for decades.")
+Training_area.items.append(statue)
 Training_area.items.append(dummy)
 Training_area.items.append(guide_book)
 Training_area.items.append(map)
 Training_area.items.append(coin)
 
 #Garden
-Garden = Room("Garden", "A circular shaped garden with a wishing fountain in the center and lots of flowers around it.")
+Garden = Room("Garden\n", "A circular shaped garden with a wishing fountain in the center and lots of flowers around it.")
 Garden.items.append(wishing_well)
 Garden.items.append(staff)
-Garden.items.append(mistress)
+Garden.items.append(statue2)
 
 #Forest entrance
-Forest_entrance = Room("Forest", "An entrance part of the forest, beware you might find some creatures")
+Forest_entrance = Room("Forest\n", "An entrance part of the forest, beware you might find some creatures")
 Forest_entrance.items.append(Grass_crawler)
+Forest_entrance.items.append(Trees)
 
 #Old hut
-Old_hut = Room("Hut", "An old, small hut in the middle of nowhere.")
+Old_hut = Room("Hut\n", "An old, small hut in the middle of nowhere.")
 Old_hut.items.append(scroll)
 Old_hut.items.append(clock)
 Old_hut.items.append(dagger)
@@ -81,7 +84,7 @@ Old_hut.items.append(bed)
 Old_hut.items.append(Ruin_guardian)
 
 #Small village
-Small_village = Room("Village", "A small village in the middle of a forest. Well known for it's monument")
+Small_village = Room("Village\n", "A small village in the middle of a forest. Well known for it's monument")
 
 #Create exits
 bedroom.exits["E"]= Training_area
@@ -103,8 +106,18 @@ print("\nYou're inside your room, its 7:30am you gotta go to your training.")
 
 while True:
   print("")
-  print(player.location.name)
-  print(player.location.description)
+  locations = (player.location.name)
+  for char in locations:
+        sleep(0.1)
+        sys.stdout.write(char)
+        sys.stdout.flush()
+
+  descriptions = (player.location.description)
+  for char in descriptions:
+        sleep(0.1)
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        
   print("\nHere are the exits: ")
   for exit  in player.location.exits :
     print(exit)
@@ -118,6 +131,8 @@ while True:
        verb = words[0]
   if len(words) > 1:
        noun = words[1]
+
+
   #Examine
 
   if verb == "examine":
@@ -147,6 +162,13 @@ while True:
                 else:
                     print("I don't think its useful.")
 
+#map
+  if verb == "use" and noun == "map":
+    if map in player.inventory:
+       print("https://docs.google.com/drawings/d/1QBR3V-Nshaiddr_AKUFami4B6W4h3vg5jDDWtsQr2Tk/edit?usp=sharing\nCopy and paste the link above on your browser!")
+    else:
+      print("You don't have a map.")
+
 #dropping
   if verb == "drop":
     for item in player.inventory:
@@ -158,7 +180,16 @@ while True:
   if verb in ["N", "S", "E", "W", "U", "D"]:
     if verb in player.location.exits:
       player.location = player.location.exits[verb]
-      print("You walked to {} and arrived somewhere".format(verb))
+      move = ("You walked to {} and arrived somewhere\n".format(verb))
+      for char in move:
+        sleep(0.1)
+        sys.stdout.write(char)
+        sys.stdout.flush()
+
+#Help
+  
+  if verb == "help":
+    print("Useable commands : examine, grab, get, drop, attack, inventory/inv.\nMake sure you read all the logs.")
 
 #Room specific 
 
@@ -167,7 +198,11 @@ while True:
     if gem not in player.inventory:
       print("I feel like I need to grab the gemstone from my bedroom")
     else:
-      print("Your mistress told you to practice everything that is written in the guide book 'How to awaken your element'")
+      quest1 = ("The instruction says : Practice everything that is written in the guide book 'How to awaken your element'")
+      for char in quest1:
+        sleep(0.1)
+        sys.stdout.write(char)
+        sys.stdout.flush()
     
   if player.location == Training_area:
     if verb == "train" and noun == "element":
@@ -217,7 +252,7 @@ while True:
   if player.location == Old_hut:
     if verb == "investigate" and noun == "ruin_guardian":
       print("You investigated the destroyed ruin guardian and inside it you found a glowing heart of it. Also known as the core")
-      player.inventory.append(guardian_core)
+      player.inventory.append(core)
 
 
         
